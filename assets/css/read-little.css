@@ -1,0 +1,86 @@
+
+.pdf-thumbnails {
+    display: none;
+    max-height: 75vh; /* Adjust as needed */
+    overflow-y: scroll;
+    width: 100%;
+}
+
+
+.pdf-thumbnails-container {
+    display: none;
+    max-height: 600px; /* Adjust as needed */
+    overflow-y: scroll;
+}
+.single-product .wd-wishlist-icon {
+    display: block;
+}
+.wrl-pdf-thumbnails-container {
+    margin-left: 15px;
+}
+.pdf-thumbnails img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px; /* Adjust spacing between images */
+}
+.fancybox-lock .fancybox-overlay {
+    overflow: auto;
+    overflow-y: scroll;
+}
+
+.pdf-thumbnails {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+
+.pdf-thumbnails li {
+    /* margin: 0; */
+    padding: 0;
+}
+
+.pdf-thumbnails li img {
+    max-width: 100%;
+    /* width: 100%; */
+    display: block;
+    margin: auto;
+}
+@media (min-width:1200px) {
+    .fancybox-content{
+        width: 60%;
+        min-height: 85%;
+        max-width: 1000px;
+
+    }
+}
+@media (max-width:992px) {
+    .fancybox-content{
+        padding: 30px;
+    }
+
+    .pdf-thumbnails {
+        max-height: 400px; /* Adjust as needed */
+    }
+
+    .pdf-thumbnails-container {
+        max-height: 400px; /* Adjust as needed */
+    }
+}
+a.woodmart-show-product-gallery {
+    display: none;
+}
+.product-images > img {
+    margin: auto;
+    display: block;
+}
+.fancybox-content{
+    background: #ddd;
+}
+.summary-inner form{
+    width: fit-content;
+    float: left;
+}
+.fancybox-content{
+    background: #eee !important;
+}
