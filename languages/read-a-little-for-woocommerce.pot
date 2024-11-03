@@ -1,0 +1,246 @@
+# Copyright (C) 2024 Al Amin
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Read a Little for Woocommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/read-a-little\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-01T05:01:49+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: read-a-little-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: read-a-little.php
+msgid "Read a Little for Woocommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: read-a-little.php
+msgid "https://shaliktheme.com/plugins/read-a-little"
+msgstr ""
+
+#. Description of the plugin
+#: read-a-little.php
+msgid "Adds a \"Read a Little\" button to WooCommerce book products for previewing content."
+msgstr ""
+
+#. Author of the plugin
+#: read-a-little.php
+msgid "Al Amin"
+msgstr ""
+
+#. Author URI of the plugin
+#: read-a-little.php
+msgid "https://almn.me/read-a-little-for-woocommerce/"
+msgstr ""
+
+#: includes/admin-settings.php:10
+#: includes/admin-settings.php:11
+#: includes/admin-settings.php:71
+msgid "Read Little Settings"
+msgstr ""
+
+#: includes/admin-settings.php:77
+msgid "Button Position"
+msgstr ""
+
+#: includes/admin-settings.php:82
+msgid "Before Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:83
+msgid "Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:84
+msgid "Before Add to Cart Form"
+msgstr ""
+
+#: includes/admin-settings.php:85
+msgid "Before Variations Form"
+msgstr ""
+
+#: includes/admin-settings.php:86
+msgid "Before Add to Cart Button"
+msgstr ""
+
+#: includes/admin-settings.php:87
+msgid "Before Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:88
+msgid "Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:89
+msgid "Before Add to Cart Quantity"
+msgstr ""
+
+#: includes/admin-settings.php:90
+msgid "After Add to Cart Quantity"
+msgstr ""
+
+#: includes/admin-settings.php:91
+msgid "After Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:92
+msgid "After Add to Cart Button"
+msgstr ""
+
+#: includes/admin-settings.php:93
+msgid "After Variations Form"
+msgstr ""
+
+#: includes/admin-settings.php:94
+msgid "After Add to Cart Form"
+msgstr ""
+
+#: includes/admin-settings.php:95
+msgid "Product Meta Start"
+msgstr ""
+
+#: includes/admin-settings.php:96
+msgid "Product Meta End"
+msgstr ""
+
+#: includes/admin-settings.php:97
+msgid "Share"
+msgstr ""
+
+#: includes/admin-settings.php:98
+msgid "After Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:109
+msgid "Button Text"
+msgstr ""
+
+#: includes/admin-settings.php:115
+msgid "Extra Button Class"
+msgstr ""
+
+#: includes/admin-settings.php:121
+msgid "Button Color"
+msgstr ""
+
+#: includes/admin-settings.php:127
+msgid "Hook Priority"
+msgstr ""
+
+#: includes/admin-settings.php:130
+msgid "Low Priority (10)"
+msgstr ""
+
+#: includes/admin-settings.php:131
+msgid "Medium Priority (20)"
+msgstr ""
+
+#: includes/admin-settings.php:132
+msgid "High Priority (30)"
+msgstr ""
+
+#: includes/admin-settings.php:147
+msgid "Button Style Options"
+msgstr ""
+
+#: includes/admin-settings.php:153
+msgid "Rounded Button"
+msgstr ""
+
+#: includes/admin-settings.php:153
+msgid "Make the button corners rounded."
+msgstr ""
+
+#: includes/admin-settings.php:154
+msgid "Button Rounding Size"
+msgstr ""
+
+#: includes/admin-settings.php:154
+msgid "Set the button round size in pixels. E.g., 10px 20px."
+msgstr ""
+
+#: includes/admin-settings.php:155
+msgid "Transparent Background"
+msgstr ""
+
+#: includes/admin-settings.php:155
+msgid "Set the button background to transparent."
+msgstr ""
+
+#: includes/admin-settings.php:158
+msgid "Button Text Color"
+msgstr ""
+
+#: includes/admin-settings.php:158
+msgid "Select the button text color."
+msgstr ""
+
+#: includes/admin-settings.php:159
+msgid "Button Border Color"
+msgstr ""
+
+#: includes/admin-settings.php:159
+msgid "Select the button border color."
+msgstr ""
+
+#: includes/admin-settings.php:160
+msgid "Hover Background Color"
+msgstr ""
+
+#: includes/admin-settings.php:160
+msgid "Select the hover background color for the button."
+msgstr ""
+
+#: includes/admin-settings.php:163
+msgid "Button Width (px)"
+msgstr ""
+
+#: includes/admin-settings.php:163
+msgid "Set the width of the button."
+msgstr ""
+
+#: includes/admin-settings.php:164
+msgid "Button Height (px)"
+msgstr ""
+
+#: includes/admin-settings.php:164
+msgid "Set the height of the button."
+msgstr ""
+
+#: includes/admin-settings.php:165
+msgid "Button Margin"
+msgstr ""
+
+#: includes/admin-settings.php:165
+msgid "Set the margin for the button. E.g., 10px 5px."
+msgstr ""
+
+#: includes/admin-settings.php:166
+msgid "Button Padding"
+msgstr ""
+
+#: includes/admin-settings.php:166
+msgid "Set the padding for the button."
+msgstr ""
+
+#: read-a-little.php:29
+msgid "WooCommerce Read Little requires WooCommerce to be installed and activated."
+msgstr ""
+
+#: read-a-little.php:86
+msgid "Book Preview"
+msgstr ""
+
+#: read-a-little.php:89
+msgid "Upload Images for Book Preview"
+msgstr ""
+
+#: read-a-little.php:151
+msgid "Settings"
+msgstr ""

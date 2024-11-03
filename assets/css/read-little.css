@@ -1,0 +1,119 @@
+
+.pdf-thumbnails {
+    display: none;
+    max-height: 75vh; /* Adjust as needed */
+    overflow-y: scroll;
+    width: 100%;
+}
+
+
+.pdf-thumbnails-container {
+    display: none;
+    max-height: 600px; /* Adjust as needed */
+    overflow-y: scroll;
+}
+.single-product .wd-wishlist-icon {
+    display: block;
+}
+.wrl-pdf-thumbnails-container {
+    margin-left: 15px;
+}
+.pdf-thumbnails img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px; /* Adjust spacing between images */
+}
+.fancybox-lock .fancybox-overlay {
+    overflow: auto;
+    overflow-y: scroll;
+}
+
+.pdf-thumbnails {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+
+.pdf-thumbnails li {
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.pdf-thumbnails li img {
+    max-width: 100%;
+    /* width: 100%; */
+    display: block;
+    margin: auto;
+}
+
+.wrl-local-info .notice {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.5s;
+}
+
+.wrl-local-info:hover > .notice {
+    transform: scale(1);
+}
+
+.wrl-local-info {
+    border: 1px solid #2091EB;
+    height: 35px;
+    display: inline-block;
+    width: 35px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 50%;
+    color: #2091EB;
+    position: relative;
+    margin-right: 10px;
+}
+
+.wrl-local-info .notice {
+    position: absolute;
+    z-index: 99;
+    color: #fff;
+    width: 225px;
+    background: #2091EB;
+    top: 100%;
+    left: 0;
+    border-radius: 5px;
+    padding: 6px;
+    line-height: 22px;
+}
+
+
+.fancybox-content{
+    background: #ddd;
+}
+
+.summary-inner form{
+    width: fit-content;
+    float: left;
+}
+
+.fancybox-content{
+    background: #eee !important;
+}
+@media (min-width:1200px) {
+    .fancybox-content{
+        width: 60%;
+        min-height: 85%;
+        max-width: 1000px;
+
+    }
+}
+@media (max-width:992px) {
+    .fancybox-content{
+        padding: 30px;
+    }
+
+    .pdf-thumbnails {
+        max-height: 400px; /* Adjust as needed */
+    }
+
+    .pdf-thumbnails-container {
+        max-height: 400px; /* Adjust as needed */
+    }
+}
