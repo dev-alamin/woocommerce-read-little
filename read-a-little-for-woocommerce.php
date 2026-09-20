@@ -1,59 +1,67 @@
 <?php
 /**
  * Plugin Name: Product Document Viewer for WooCommerce
- * Plugin URI: https://shaliktheme.com/plugins/read-a-little
+ * Plugin URI: https://almn.me/product-document-viewer-for-woocommerce/
  * Description: Preview PDFs, Word, Excel, and PowerPoint files directly on WooCommerce product pages.
- * Version: 1.2.2
+ * Version: 1.3.0
  * Author: Al Amin
- * Author URI: https://almn.me/read-a-little-for-woocommerce/
+ * Author URI: https://almn.me
  * Requires Plugins: woocommerce
+ * Requires PHP: 7.4
  * Text Domain: product-document-viewer-for-woocommerce
  * Domain Path: /languages
  * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Prefix: pdvwc
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Check if WooCommerce is active
+// Check if WooCommerce is active.
 if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
-	add_action( 'admin_notices', 'wrl_woocommerce_inactive_notice' );
+	add_action( 'admin_notices', 'pdvwc_woocommerce_inactive_notice' );
 	return;
 }
 
-function wrl_woocommerce_inactive_notice() {
+/**
+ * Admin notice shown when WooCommerce isn't active.
+ */
+function pdvwc_woocommerce_inactive_notice() {
 	?>
 	<div class="notice notice-error is-dismissible">
-		<p><?php esc_html_e( 'WooCommerce Read Little requires WooCommerce to be installed and activated.', 'product-document-viewer-for-woocommerce' ); ?></p>
+		<p><?php esc_html_e( 'Product Document Viewer for WooCommerce requires WooCommerce to be installed and activated.', 'product-document-viewer-for-woocommerce' ); ?></p>
 	</div>
 	<?php
 }
 
-// Include required files
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin-settings.php';
 
-// Include required files for Carbon Fields
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
-if ( ! defined( 'WOO_READ_LITTLE_VERSION' ) ) {
-	define( 'WOO_READ_LITTLE_VERSION', '1.2.2' );
+if ( ! defined( 'PDVWC_VERSION' ) ) {
+	define( 'PDVWC_VERSION', '1.3.0' );
 }
 
-if ( ! defined( 'WOO_READ_LITTLE_ASSETS_URL' ) ) {
-	define( 'WOO_READ_LITTLE_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets/' );
+if ( ! defined( 'PDVWC_ASSETS_URL' ) ) {
+	define( 'PDVWC_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets/' );
 }
 
-if ( ! defined( 'WOO_READ_LITTLE_ASSETS_PATH' ) ) {
-	define( 'WOO_READ_LITTLE_ASSETS_PATH', plugin_dir_path( __FILE__ ) . 'assets/' );
+if ( ! defined( 'PDVWC_ASSETS_PATH' ) ) {
+	define( 'PDVWC_ASSETS_PATH', plugin_dir_path( __FILE__ ) . 'assets/' );
+}
+
+// The product-meta key used to store preview file attachment IDs (Carbon Fields media_gallery).
+if ( ! defined( 'PDVWC_META_KEY' ) ) {
+	define( 'PDVWC_META_KEY', 'pdvwc_preview_files' );
 }
 
 // MIME types this plugin knows how to preview, mapped to a viewer "family".
 // Centralised here so both render paths (hook + shortcode) share one source of truth.
-const WRL_OFFICE_MIME_TYPES = array(
+const PDVWC_OFFICE_MIME_TYPES = array(
 	'msword',
 	'vnd.openxmlformats-officedocument.wordprocessingml.document',
 	'vnd.ms-excel',
@@ -62,27 +70,93 @@ const WRL_OFFICE_MIME_TYPES = array(
 	'vnd.openxmlformats-officedocument.presentationml.presentation',
 );
 
-class WooCommerceReadLittle {
+/**
+ * One-time migration from the plugin's earlier "Read a Little" naming
+ * (wcrl_* options, read_little_pdf product meta) to the pdvwc_* scheme.
+ *
+ * Runs on activation for fresh setups, and is also checked on 'plugins_loaded'
+ * so sites that got this file replaced via an in-place update (no
+ * deactivate/reactivate, so no activation hook fires) still get migrated.
+ * Guarded by a version flag so it only ever runs once.
+ */
+function pdvwc_maybe_migrate_legacy_data() {
+	if ( get_option( 'pdvwc_migrated_1_3_0' ) ) {
+		return;
+	}
+
+	global $wpdb;
+
+	// Map of old option name => new option name.
+	$option_map = array(
+		'wcrl_button_text'           => 'pdvwc_button_text',
+		'wcrl_button_class'          => 'pdvwc_button_class',
+		'wcrl_button_color'          => 'pdvwc_button_color',
+		'wcrl_button_position'       => 'pdvwc_button_position',
+		'wcrl_hook_priority'         => 'pdvwc_hook_priority',
+		'wcrl_hide_button_position'  => 'pdvwc_hide_button_position',
+		'wcrl_button_rounded'        => 'pdvwc_button_rounded',
+		'wcrl_button_round_size'     => 'pdvwc_button_round_size',
+		'wcrl_button_transparent_bg' => 'pdvwc_button_transparent_bg',
+		'wcrl_button_font_color'     => 'pdvwc_button_font_color',
+		'wcrl_button_border_color'   => 'pdvwc_button_border_color',
+		'wcrl_button_hover_bg_color' => 'pdvwc_button_hover_bg_color',
+		'wcrl_button_width'          => 'pdvwc_button_width',
+		'wcrl_button_height'         => 'pdvwc_button_height',
+		'wcrl_button_margin'         => 'pdvwc_button_margin',
+		'wcrl_button_padding'        => 'pdvwc_button_padding',
+		'wcrl_button_font_size'      => 'pdvwc_button_font_size',
+		'wcrl_button_border_width'   => 'pdvwc_button_border_width',
+	);
+
+	foreach ( $option_map as $old_name => $new_name ) {
+		// Only migrate if the old value exists and the new one hasn't already been set
+		// (e.g. by the admin re-saving settings before this migration ran).
+		$old_value = get_option( $old_name, null );
+		if ( null !== $old_value && false === get_option( $new_name, false ) ) {
+			update_option( $new_name, $old_value );
+		}
+	}
+
+	// Migrate the product-meta key (Carbon Fields media_gallery: read_little_pdf -> pdvwc_preview_files)
+	// across every product that has the old meta key set.
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$rows = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s",
+			'read_little_pdf'
+		)
+	);
+
+	foreach ( (array) $rows as $row ) {
+		if ( ! metadata_exists( 'post', $row->post_id, PDVWC_META_KEY ) ) {
+			update_post_meta( $row->post_id, PDVWC_META_KEY, maybe_unserialize( $row->meta_value ) );
+		}
+	}
+
+	update_option( 'pdvwc_migrated_1_3_0', 1 );
+}
+register_activation_hook( __FILE__, 'pdvwc_maybe_migrate_legacy_data' );
+add_action( 'plugins_loaded', 'pdvwc_maybe_migrate_legacy_data' );
+
+class PDVWC_Plugin {
 
 	public function __construct() {
-		// Initialize Carbon Fields
+		// Initialize Carbon Fields.
 		add_action( 'after_setup_theme', array( $this, 'crb_load' ) );
 		add_action( 'carbon_fields_register_fields', array( $this, 'crb_attach_product_fields' ) );
 
-		add_shortcode( 'read_little_button', array( $this, 'read_little_button_shortcode' ) );
-		add_shortcode( 'product_preview_button', array( $this, 'read_little_button_shortcode' ) );
+		// New canonical shortcode, plus the old names kept as aliases for
+		// backward compatibility with content that already uses them.
+		add_shortcode( 'pdvwc_preview_button', array( $this, 'preview_button_shortcode' ) );
+		add_shortcode( 'read_little_button', array( $this, 'preview_button_shortcode' ) );
+		add_shortcode( 'product_preview_button', array( $this, 'preview_button_shortcode' ) );
 
-		// Enqueue Fancybox scripts
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		// Add WooCommerce hook for button
 		add_action( 'wp', array( $this, 'add_woocommerce_button_hook' ) );
-
-		// Add settings link to plugin action links
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_plugin_action_links' ) );
 	}
 
-	// Load Carbon Fields
+	// Load Carbon Fields.
 	public function crb_load() {
 		$autoload = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
@@ -93,7 +167,7 @@ class WooCommerceReadLittle {
 				'admin_notices',
 				function () {
 					echo '<div class="notice notice-error"><p>' .
-					esc_html__( 'Read Little: Carbon Fields library is missing (vendor/autoload.php not found). Custom fields will not appear.', 'product-document-viewer-for-woocommerce' ) .
+					esc_html__( 'Product Document Viewer for WooCommerce: Carbon Fields library is missing (vendor/autoload.php not found). Custom fields will not appear.', 'product-document-viewer-for-woocommerce' ) .
 					'</p></div>';
 				}
 			);
@@ -107,28 +181,28 @@ class WooCommerceReadLittle {
 		}
 	}
 
-	// Enqueue Fancybox and custom styles/scripts
+	// Enqueue Fancybox and custom styles/scripts.
 	public function enqueue_scripts() {
 		$file = __DIR__ . '/includes/scripts.php';
 
 		if ( file_exists( $file ) ) {
 			include_once $file;
 		} else {
-			error_log( 'Read Little: missing includes/scripts.php.' );
+			error_log( 'Product Document Viewer for WooCommerce: missing includes/scripts.php.' );
 		}
 	}
 
-	// Add a custom field for the PDF preview using Carbon Fields
+	// Add a custom field for the document preview using Carbon Fields.
 	public function crb_attach_product_fields() {
 		if ( ! class_exists( '\Carbon_Fields\Container\Container' ) && ! class_exists( 'Carbon_Fields\Container' ) ) {
 			return;
 		}
 
-		Container::make( 'post_meta', __( 'Read Little Sample File', 'product-document-viewer-for-woocommerce' ) )
+		Container::make( 'post_meta', __( 'Document Preview Files', 'product-document-viewer-for-woocommerce' ) )
 			->where( 'post_type', '=', 'product' )
 			->add_fields(
 				array(
-					Field::make( 'media_gallery', 'read_little_pdf', __( 'Upload images, documents, PDFs, and Excel files to showcase the preview.', 'product-document-viewer-for-woocommerce' ) )
+					Field::make( 'media_gallery', PDVWC_META_KEY, __( 'Upload images, documents, PDFs, and Excel files to showcase the preview.', 'product-document-viewer-for-woocommerce' ) )
 						->set_type( array( 'image', 'file' ) ),
 				)
 			);
@@ -150,7 +224,7 @@ class WooCommerceReadLittle {
 			return 'pdf';
 		}
 
-		foreach ( WRL_OFFICE_MIME_TYPES as $office_type ) {
+		foreach ( PDVWC_OFFICE_MIME_TYPES as $office_type ) {
 			if ( strpos( $file_type, $office_type ) !== false ) {
 				return 'office';
 			}
@@ -166,32 +240,21 @@ class WooCommerceReadLittle {
 	 * Online viewer, which — unlike Google's undocumented gview endpoint —
 	 * reliably renders .docx/.xlsx/.pptx.
 	 *
-	 * PDFs are linked directly. Fancybox v3 auto-binds a delegated click
-	 * handler to any [data-fancybox] element as soon as its own JS loads —
-	 * the earlier "opens in browser instead of the lightbox" issue was
-	 * because Fancybox's CSS/JS were 404ing (filename mismatch), not because
-	 * of URL-based type detection. With data-type="iframe" explicitly set on
-	 * the link and the library actually loading, Fancybox respects that and
-	 * iframes the raw file — no wrapper page needed, which also avoids
-	 * nesting the browser's native PDF viewer two iframes deep (that nesting
-	 * is what broke internal scrolling/thumbnail clicks and caused the
-	 * runaway auto-sized height).
+	 * PDFs are linked directly; Fancybox's own delegated click handler picks
+	 * up [data-fancybox] elements once its library has loaded, and
+	 * data-type="iframe" tells it to render the file inline rather than
+	 * navigate to it.
 	 *
-	 * @param int    $media_id Attachment ID (unused for PDFs, kept for a consistent signature).
 	 * @param string $file_url Public, unauthenticated URL to the file.
 	 * @param string $family   'office' or 'pdf'.
 	 * @return string Fully escaped, ready-to-output URL.
 	 */
-	private function build_viewer_url( $media_id, $file_url, $family ) {
+	private function build_viewer_url( $file_url, $family ) {
 		if ( 'office' === $family ) {
 			$viewer = 'https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode( $file_url );
 			return esc_url( $viewer );
 		}
 
-		// 'pdf' — link directly; sizing is fixed via data-width/data-height
-		// on the anchor (see render_preview_markup()) instead of Fancybox's
-		// autoSize, which otherwise measures the PDF viewer's full multi-page
-		// content height rather than a fixed viewport.
 		return esc_url( $file_url );
 	}
 
@@ -208,9 +271,9 @@ class WooCommerceReadLittle {
 	 */
 	private function resolve_file_url( $media_id ) {
 		if ( $this->is_local_server() ) {
-			$sample_path = WOO_READ_LITTLE_ASSETS_PATH . 'sample/demo-preview.pdf';
+			$sample_path = PDVWC_ASSETS_PATH . 'sample/demo-preview.pdf';
 			if ( file_exists( $sample_path ) ) {
-				return WOO_READ_LITTLE_ASSETS_URL . 'sample/demo-preview.pdf';
+				return PDVWC_ASSETS_URL . 'sample/demo-preview.pdf';
 			}
 			return false; // No bundled sample present — skip rather than reach out to a third-party domain.
 		}
@@ -226,10 +289,10 @@ class WooCommerceReadLittle {
 	 * @param array $media_ids Attachment IDs from Carbon Fields or shortcode attr.
 	 */
 	private function render_preview_markup( array $media_ids ) {
-		$button_text        = get_option( 'wcrl_button_text', 'Read a Little' );
-		$extra_button_class = get_option( 'wcrl_button_class', '' );
+		$button_text        = get_option( 'pdvwc_button_text', 'Read a Little' );
+		$extra_button_class = get_option( 'pdvwc_button_class', '' );
 
-		echo '<div class="wrl-pdf-thumbnails-container">';
+		echo '<div class="pdvwc-preview-container">';
 
 		if ( $this->is_local_server() ) {
 			$this->show_localhost_notice();
@@ -237,7 +300,7 @@ class WooCommerceReadLittle {
 
 		// Unique per render call so multiple products with previews on the same
 		// page (e.g. a related-products loop) don't share one Fancybox group.
-		$gallery_group = 'wrl-preview-' . wp_unique_id();
+		$gallery_group = 'pdvwc-preview-' . wp_unique_id();
 
 		$viewer_urls = array();
 
@@ -254,7 +317,7 @@ class WooCommerceReadLittle {
 				continue;
 			}
 
-			$viewer_urls[] = $this->build_viewer_url( $media_id, $file_url, $family );
+			$viewer_urls[] = $this->build_viewer_url( $file_url, $family );
 		}
 
 		if ( ! empty( $viewer_urls ) ) {
@@ -265,21 +328,21 @@ class WooCommerceReadLittle {
 
 			// One visible trigger button, using the first document as its href.
 			$first_url = array_shift( $viewer_urls );
-			echo '<a class="iframe fancybox-pdf" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $first_url ) . '">';
-				echo '<button type="button" class="button btn wrl-button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
+			echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $first_url ) . '">';
+				echo '<button type="button" class="button btn pdvwc-button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
 			echo '</a>';
 
 			// Remaining documents: same gallery group, hidden from view — Fancybox's
 			// own next/prev arrows let people page through them once the lightbox is open.
 			foreach ( $viewer_urls as $extra_url ) {
-				echo '<a class="iframe fancybox-pdf" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $extra_url ) . '" style="display:none;" aria-hidden="true"></a>';
+				echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $extra_url ) . '" style="display:none;" aria-hidden="true"></a>';
 			}
 		} else {
-			echo '<button type="button" class="open-pdf-popup-btn wd-buy-now-btn button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
+			echo '<button type="button" class="pdvwc-open-popup-btn wd-buy-now-btn button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
 		}
 
 		// Thumbnails for image entries in the same media gallery field.
-		echo '<ul class="pdf-thumbnails hidden">';
+		echo '<ul class="pdvwc-thumbnails hidden">';
 		foreach ( $media_ids as $id ) {
 			$file_type = get_post_mime_type( $id );
 
@@ -292,7 +355,7 @@ class WooCommerceReadLittle {
 				continue;
 			}
 
-			echo '<li class="ff-pdf-thumbnail-link">';
+			echo '<li class="pdvwc-thumbnail-item">';
 				echo '<a data-fancybox="gallery" href="' . esc_url( $image_url ) . '">';
 					echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( get_the_title() ) . '">';
 				echo '</a>';
@@ -303,22 +366,22 @@ class WooCommerceReadLittle {
 		echo '</div>';
 	}
 
-	// Display the "Read a Little" button (hooked into WooCommerce templates)
-	public function display_read_little_button() {
+	// Display the preview button (hooked into WooCommerce templates).
+	public function display_preview_button() {
 		global $product;
 
 		if ( ! $product instanceof WC_Product ) {
 			return;
 		}
 
-		$book_preview_ids = carbon_get_post_meta( $product->get_id(), 'read_little_pdf' );
+		$preview_ids = carbon_get_post_meta( $product->get_id(), PDVWC_META_KEY );
 
-		if ( is_array( $book_preview_ids ) && ! empty( $book_preview_ids ) ) {
-			$this->render_preview_markup( $book_preview_ids );
+		if ( is_array( $preview_ids ) && ! empty( $preview_ids ) ) {
+			$this->render_preview_markup( $preview_ids );
 		}
 	}
 
-	public function read_little_button_shortcode( $atts ) {
+	public function preview_button_shortcode( $atts ) {
 		global $product;
 
 		$atts = shortcode_atts(
@@ -326,19 +389,19 @@ class WooCommerceReadLittle {
 				'media_ids' => '',
 			),
 			$atts,
-			'read_little_button'
+			'pdvwc_preview_button'
 		);
 
 		if ( ! empty( $atts['media_ids'] ) ) {
 			$media_ids = array_map( 'absint', explode( ',', $atts['media_ids'] ) );
 		} elseif ( $product instanceof WC_Product ) {
-			$media_ids = carbon_get_post_meta( $product->get_id(), 'read_little_pdf' );
+			$media_ids = carbon_get_post_meta( $product->get_id(), PDVWC_META_KEY );
 		} else {
 			$media_ids = array();
 		}
 
 		if ( ! is_array( $media_ids ) || empty( $media_ids ) ) {
-			return '<p>' . esc_html__( 'No book preview available.', 'product-document-viewer-for-woocommerce' ) . '</p>';
+			return '<p>' . esc_html__( 'No document preview available.', 'product-document-viewer-for-woocommerce' ) . '</p>';
 		}
 
 		ob_start();
@@ -346,9 +409,9 @@ class WooCommerceReadLittle {
 		return ob_get_clean();
 	}
 
-	// Add WooCommerce hook based on the admin-selected position
+	// Add WooCommerce hook based on the admin-selected position.
 	public function add_woocommerce_button_hook() {
-		$position = get_option( 'wcrl_button_position', 'woocommerce_single_product_summary' );
+		$position = get_option( 'pdvwc_button_position', 'woocommerce_single_product_summary' );
 
 		$allowed_positions = array(
 			'woocommerce_before_single_product_summary',
@@ -375,16 +438,16 @@ class WooCommerceReadLittle {
 		}
 
 		// Default kept consistent with the settings page default (30).
-		$priority = get_option( 'wcrl_hook_priority', 30 );
+		$priority = get_option( 'pdvwc_hook_priority', 30 );
 
-		if ( ! get_option( 'wcrl_hide_button_position' ) ) {
-			add_action( $position, array( $this, 'display_read_little_button' ), intval( $priority ) );
+		if ( ! get_option( 'pdvwc_hide_button_position' ) ) {
+			add_action( $position, array( $this, 'display_preview_button' ), intval( $priority ) );
 		}
 	}
 
-	// Add settings link to the plugin action links
+	// Add settings link to the plugin action links.
 	public function add_plugin_action_links( $links ) {
-		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wcrl-settings' ) ) . '">' . esc_html__( 'Settings', 'product-document-viewer-for-woocommerce' ) . '</a>';
+		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=pdvwc-settings' ) ) . '">' . esc_html__( 'Settings', 'product-document-viewer-for-woocommerce' ) . '</a>';
 		array_push( $links, $settings_link );
 		return $links;
 	}
@@ -404,12 +467,11 @@ class WooCommerceReadLittle {
 	public function show_localhost_notice() {
 		$notice = __( 'This is a local/development environment. A bundled sample file is shown here instead of the real attachment — on the live site, your actual file will display.', 'product-document-viewer-for-woocommerce' );
 
-		echo '<span class="wrl-local-info">';
+		echo '<span class="pdvwc-local-info">';
 			echo '<i>' . esc_html( '𝐢' ) . '</i>';
 			echo '<span class="notice">' . esc_html( $notice ) . '</span>';
 		echo '</span>';
 	}
 }
 
-// Initialize the plugin
-new WooCommerceReadLittle();
+new PDVWC_Plugin();

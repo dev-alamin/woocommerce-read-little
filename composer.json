@@ -1,5 +1,8 @@
 {
-    "name": "coderalamin/read-little-for-woocommerce",
+    "name": "coderalamin/product-document-viewer-for-woocommerce",
+    "description": "Preview PDFs, Word, Excel, and PowerPoint files directly on WooCommerce product pages.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
     "require": {
         "htmlburger/carbon-fields": "^3.6"
     },

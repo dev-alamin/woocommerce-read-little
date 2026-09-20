@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Read Little for WooCommerce">
-    <description>WPCS ruleset for the read-little plugin</description>
+<ruleset name="Product Document Viewer for WooCommerce">
+    <description>WPCS ruleset for the Product Document Viewer for WooCommerce plugin</description>
 
     <!-- Scan the plugin source, skip vendored/generated code -->
     <file>.</file>
@@ -27,7 +27,7 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="read-little"/>
+                <element value="product-document-viewer-for-woocommerce"/>
             </property>
         </properties>
     </rule>
@@ -36,10 +36,8 @@
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <properties>
             <property name="prefixes" type="array">
-                <element value="wcrl"/>
-                <element value="wrl"/>
-                <element value="WOO_READ_LITTLE"/>
-                <element value="WooCommerceReadLittle"/>
+                <element value="pdvwc"/>
+                <element value="PDVWC"/>
             </property>
         </properties>
     </rule>

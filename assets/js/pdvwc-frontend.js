@@ -1,16 +1,16 @@
 jQuery(document).ready(function($){
-    $(document).on("click", '.open-pdf-popup-btn', function(event) {
+    $(document).on("click", '.pdvwc-open-popup-btn', function(event) {
         event.preventDefault();
-        
+
         $.fancybox.open({
-            src: $('.pdf-thumbnails'),
+            src: $('.pdvwc-thumbnails'),
             type: 'inline',
             fitToView: false,
             autoSize: true,
             autoDimensions: false,
-            clickOutside: false, 
-            drag:false,
-            touch:false,
+            clickOutside: false,
+            drag: false,
+            touch: false,
             i18n: {
                 en: {
                     ERROR: 'No Preview has found'
@@ -22,6 +22,6 @@ jQuery(document).ready(function($){
                 }
             }
         });
-        $('.pdf-thumbnails-container').removeClass('hidden');
+        $('.pdvwc-thumbnails-container').removeClass('hidden');
     });
 });
