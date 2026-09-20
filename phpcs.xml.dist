@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="Read Little for WooCommerce">
+    <description>WPCS ruleset for the read-little plugin</description>
+
+    <!-- Scan the plugin source, skip vendored/generated code -->
+    <file>.</file>
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/languages/*</exclude-pattern>
+    <exclude-pattern>/assets/js/*</exclude-pattern>
+    <exclude-pattern>/assets/css/*</exclude-pattern>
+    <exclude-pattern>/.wordpress-org/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+
+    <arg value="sp"/>
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+
+    <!-- Core WordPress standard, security-focused subset + full ruleset -->
+    <rule ref="WordPress">
+        <!-- File name doesn't follow class-name convention; not worth a rename churn right now -->
+        <exclude name="WordPress.Files.FileName"/>
+    </rule>
+
+    <!-- Enforce plugin-specific text domain instead of the generic default -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="read-little"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Enforce prefixing for globals/functions to avoid collisions -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="wcrl"/>
+                <element value="wrl"/>
+                <element value="WOO_READ_LITTLE"/>
+                <element value="WooCommerceReadLittle"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Check against the minimum PHP version declared for the plugin -->
+    <config name="testVersion" value="7.4-"/>
+    <rule ref="PHPCompatibilityWP"/>
+</ruleset>
