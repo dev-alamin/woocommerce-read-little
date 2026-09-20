@@ -1,0 +1,105 @@
+name: Generate Plugin ZIP & Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify version consistency
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "=== Plugin header ==="
+          head -30 product-document-viewer-for-woocommerce.php
+
+          echo "=== Version lines ==="
+          grep -n "Version" product-document-viewer-for-woocommerce.php || true
+          grep -n "Stable tag" readme.txt || true
+
+          HEADER_VER=$(awk '
+            BEGIN { IGNORECASE=1 }
+            /^[ \t\/*]*Version:/ {
+              sub(/^[ \t\/*]*Version:[ \t]*/, "")
+              gsub(/\r/, "")
+              print
+              exit
+            }
+          ' product-document-viewer-for-woocommerce.php)
+
+          STABLE_TAG=$(awk -F': *' '/^Stable tag:/ {gsub(/\r/, ""); print $2; exit}' readme.txt)
+          TAG_VER="${GITHUB_REF_NAME#v}"
+
+          echo "Header version : [$HEADER_VER]"
+          echo "Stable tag     : [$STABLE_TAG]"
+          echo "Git tag        : [$TAG_VER]"
+
+          test -n "$HEADER_VER" || { echo "::error::Could not read Version from product-document-viewer-for-woocommerce.php"; exit 1; }
+
+          if [ "$HEADER_VER" != "$STABLE_TAG" ] || [ "$HEADER_VER" != "$TAG_VER" ]; then
+            echo "::error::Version mismatch — header=$HEADER_VER stable_tag=$STABLE_TAG git_tag=$TAG_VER"
+            exit 1
+          fi
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install PHP Dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Verify Carbon Fields was installed
+        run: |
+          set -euo pipefail
+          test -f vendor/autoload.php || { echo "::error::vendor/autoload.php missing after composer install — Carbon Fields dependency did not install."; exit 1; }
+
+      - name: Prepare Bundle
+        run: |
+          set -euo pipefail
+          BUILD_DIR="product-document-viewer-for-woocommerce"
+          mkdir -p "$BUILD_DIR"
+
+          cp -r includes "$BUILD_DIR/"
+          cp -r vendor "$BUILD_DIR/"
+          cp -r languages "$BUILD_DIR/"
+          cp -r assets "$BUILD_DIR/"
+
+          cp product-document-viewer-for-woocommerce.php "$BUILD_DIR/"
+          cp readme.txt "$BUILD_DIR/"
+          cp index.php "$BUILD_DIR/"
+
+          # composer.json/.lock aren't needed by WordPress at runtime and add no
+          # value to the shipped plugin — left out of the distributed bundle
+          # rather than copied in like the dev repo's own copies.
+
+          find "$BUILD_DIR" -name "*.map" -delete
+
+      - name: Create ZIP
+        run: zip -r product-document-viewer-for-woocommerce.zip product-document-viewer-for-woocommerce
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: product-document-viewer-for-woocommerce.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to WordPress.org SVN
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: product-document-viewer-for-woocommerce
+          BUILD_DIR: product-document-viewer-for-woocommerce
