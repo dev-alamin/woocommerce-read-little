@@ -7,9 +7,10 @@
  * Author: Al Amin
  * Author URI: https://almn.me/read-a-little-for-woocommerce/
  * Requires Plugins: woocommerce
- * Text Domain: read-little
+ * Text Domain: product-document-viewer-for-woocommerce
  * Domain Path: /languages
  * License: GPLv2 or later
+ * Prefix: pdvwc
  */
 
 // Exit if accessed directly
@@ -26,7 +27,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 function wrl_woocommerce_inactive_notice() {
 	?>
 	<div class="notice notice-error is-dismissible">
-		<p><?php esc_html_e( 'WooCommerce Read Little requires WooCommerce to be installed and activated.', 'read-little' ); ?></p>
+		<p><?php esc_html_e( 'WooCommerce Read Little requires WooCommerce to be installed and activated.', 'product-document-viewer-for-woocommerce' ); ?></p>
 	</div>
 	<?php
 }
@@ -88,11 +89,14 @@ class WooCommerceReadLittle {
 		if ( ! file_exists( $autoload ) ) {
 			// Fail gracefully rather than fatal-erroring the whole site if
 			// composer dependencies were never installed / were excluded from a deploy.
-			add_action( 'admin_notices', function () {
-				echo '<div class="notice notice-error"><p>' .
-					esc_html__( 'Read Little: Carbon Fields library is missing (vendor/autoload.php not found). Custom fields will not appear.', 'read-little' ) .
+			add_action(
+				'admin_notices',
+				function () {
+					echo '<div class="notice notice-error"><p>' .
+					esc_html__( 'Read Little: Carbon Fields library is missing (vendor/autoload.php not found). Custom fields will not appear.', 'product-document-viewer-for-woocommerce' ) .
 					'</p></div>';
-			} );
+				}
+			);
 			return;
 		}
 
@@ -120,11 +124,11 @@ class WooCommerceReadLittle {
 			return;
 		}
 
-		Container::make( 'post_meta', __( 'Read Little Sample File', 'read-little' ) )
+		Container::make( 'post_meta', __( 'Read Little Sample File', 'product-document-viewer-for-woocommerce' ) )
 			->where( 'post_type', '=', 'product' )
 			->add_fields(
 				array(
-					Field::make( 'media_gallery', 'read_little_pdf', __( 'Upload images, documents, PDFs, and Excel files to showcase the preview.', 'read-little' ) )
+					Field::make( 'media_gallery', 'read_little_pdf', __( 'Upload images, documents, PDFs, and Excel files to showcase the preview.', 'product-document-viewer-for-woocommerce' ) )
 						->set_type( array( 'image', 'file' ) ),
 				)
 			);
@@ -334,7 +338,7 @@ class WooCommerceReadLittle {
 		}
 
 		if ( ! is_array( $media_ids ) || empty( $media_ids ) ) {
-			return '<p>' . esc_html__( 'No book preview available.', 'read-little' ) . '</p>';
+			return '<p>' . esc_html__( 'No book preview available.', 'product-document-viewer-for-woocommerce' ) . '</p>';
 		}
 
 		ob_start();
@@ -380,7 +384,7 @@ class WooCommerceReadLittle {
 
 	// Add settings link to the plugin action links
 	public function add_plugin_action_links( $links ) {
-		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wcrl-settings' ) ) . '">' . esc_html__( 'Settings', 'read-little' ) . '</a>';
+		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wcrl-settings' ) ) . '">' . esc_html__( 'Settings', 'product-document-viewer-for-woocommerce' ) . '</a>';
 		array_push( $links, $settings_link );
 		return $links;
 	}
@@ -398,7 +402,7 @@ class WooCommerceReadLittle {
 	}
 
 	public function show_localhost_notice() {
-		$notice = __( 'This is a local/development environment. A bundled sample file is shown here instead of the real attachment — on the live site, your actual file will display.', 'read-little' );
+		$notice = __( 'This is a local/development environment. A bundled sample file is shown here instead of the real attachment — on the live site, your actual file will display.', 'product-document-viewer-for-woocommerce' );
 
 		echo '<span class="wrl-local-info">';
 			echo '<i>' . esc_html( '𝐢' ) . '</i>';

@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wcrl_add_admin_menu() {
 	add_submenu_page(
 		'woocommerce',
-		__( 'Read Little Settings', 'read-little' ),
-		__( 'Read Little Settings', 'read-little' ),
+		__( 'Document Viewer', 'product-document-viewer-for-woocommerce' ),
+		__( 'Document Viewer', 'product-document-viewer-for-woocommerce' ),
 		'manage_options',
 		'wcrl-settings',
 		'wcrl_settings_page_html'
@@ -92,34 +92,34 @@ function wcrl_settings_page_html() {
 	}
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Read Little Settings', 'read-little' ); ?></h1>
+		<h1><?php esc_html_e( 'Document Viewer Settings', 'product-document-viewer-for-woocommerce' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'wcrl_settings_group' ); ?>
 			<?php do_settings_sections( 'wcrl-options' ); ?>
 			<table class="form-table">
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Button Position', 'read-little' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Button Position', 'product-document-viewer-for-woocommerce' ); ?></th>
 					<td>
 						<select name="wcrl_button_position">
 							<?php
 							$positions         = array(
-								'woocommerce_before_single_product_summary' => __( 'Before Single Product Summary', 'read-little' ),
-								'woocommerce_single_product_summary' => __( 'Single Product Summary', 'read-little' ),
-								'woocommerce_before_add_to_cart_form' => __( 'Before Add to Cart Form', 'read-little' ),
-								'woocommerce_before_variations_form' => __( 'Before Variations Form', 'read-little' ),
-								'woocommerce_before_add_to_cart_button' => __( 'Before Add to Cart Button', 'read-little' ),
-								'woocommerce_before_single_variation' => __( 'Before Single Variation', 'read-little' ),
-								'woocommerce_single_variation' => __( 'Single Variation', 'read-little' ),
-								'woocommerce_before_add_to_cart_quantity' => __( 'Before Add to Cart Quantity', 'read-little' ),
-								'woocommerce_after_add_to_cart_quantity' => __( 'After Add to Cart Quantity', 'read-little' ),
-								'woocommerce_after_single_variation' => __( 'After Single Variation', 'read-little' ),
-								'woocommerce_after_add_to_cart_button' => __( 'After Add to Cart Button', 'read-little' ),
-								'woocommerce_after_variations_form' => __( 'After Variations Form', 'read-little' ),
-								'woocommerce_after_add_to_cart_form' => __( 'After Add to Cart Form', 'read-little' ),
-								'woocommerce_product_meta_start' => __( 'Product Meta Start', 'read-little' ),
-								'woocommerce_product_meta_end' => __( 'Product Meta End', 'read-little' ),
-								'woocommerce_share' => __( 'Share', 'read-little' ),
-								'woocommerce_after_single_product_summary' => __( 'After Single Product Summary', 'read-little' ),
+								'woocommerce_before_single_product_summary' => __( 'Before Single Product Summary', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_single_product_summary' => __( 'Single Product Summary', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_before_add_to_cart_form' => __( 'Before Add to Cart Form', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_before_variations_form' => __( 'Before Variations Form', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_before_add_to_cart_button' => __( 'Before Add to Cart Button', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_before_single_variation' => __( 'Before Single Variation', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_single_variation' => __( 'Single Variation', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_before_add_to_cart_quantity' => __( 'Before Add to Cart Quantity', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_add_to_cart_quantity' => __( 'After Add to Cart Quantity', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_single_variation' => __( 'After Single Variation', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_add_to_cart_button' => __( 'After Add to Cart Button', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_variations_form' => __( 'After Variations Form', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_add_to_cart_form' => __( 'After Add to Cart Form', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_product_meta_start' => __( 'Product Meta Start', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_product_meta_end' => __( 'Product Meta End', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_share' => __( 'Share', 'product-document-viewer-for-woocommerce' ),
+								'woocommerce_after_single_product_summary' => __( 'After Single Product Summary', 'product-document-viewer-for-woocommerce' ),
 							);
 							$selected_position = get_option( 'wcrl_button_position', 'woocommerce_single_product_summary' );
 							foreach ( $positions as $value => $label ) {
@@ -130,32 +130,32 @@ function wcrl_settings_page_html() {
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Button Text', 'read-little' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Button Text', 'product-document-viewer-for-woocommerce' ); ?></th>
 					<td>
 						<input type="text" name="wcrl_button_text" value="<?php echo esc_html( get_option( 'wcrl_button_text', 'Read a Little' ) ); ?>" />
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Extra Button Class', 'read-little' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Extra Button Class', 'product-document-viewer-for-woocommerce' ); ?></th>
 					<td>
 						<input type="text" name="wcrl_button_class" value="<?php echo esc_attr( get_option( 'wcrl_button_class', '' ) ); ?>" />
-						<p class="description"><?php esc_html_e( 'You can enter multiple space-separated classes, e.g. "btn-lg my-class".', 'read-little' ); ?></p>
+						<p class="description"><?php esc_html_e( 'You can enter multiple space-separated classes, e.g. "btn-lg my-class".', 'product-document-viewer-for-woocommerce' ); ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Button Color', 'read-little' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Button Color', 'product-document-viewer-for-woocommerce' ); ?></th>
 					<td>
 						<input type="color" name="wcrl_button_color" value="<?php echo esc_attr( get_option( 'wcrl_button_color', '#0073aa' ) ); ?>" />
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Hook Priority', 'read-little' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Hook Priority', 'product-document-viewer-for-woocommerce' ); ?></th>
 					<td>
 						<?php $current_priority = get_option( 'wcrl_hook_priority', 30 ); ?>
 						<select name="wcrl_hook_priority">
-							<option value="10" <?php selected( $current_priority, 10 ); ?>><?php esc_html_e( 'Low Priority (10)', 'read-little' ); ?></option>
-							<option value="20" <?php selected( $current_priority, 20 ); ?>><?php esc_html_e( 'Medium Priority (20)', 'read-little' ); ?></option>
-							<option value="30" <?php selected( $current_priority, 30 ); ?>><?php esc_html_e( 'High Priority (30)', 'read-little' ); ?></option>
+							<option value="10" <?php selected( $current_priority, 10 ); ?>><?php esc_html_e( 'Low Priority (10)', 'product-document-viewer-for-woocommerce' ); ?></option>
+							<option value="20" <?php selected( $current_priority, 20 ); ?>><?php esc_html_e( 'Medium Priority (20)', 'product-document-viewer-for-woocommerce' ); ?></option>
+							<option value="30" <?php selected( $current_priority, 30 ); ?>><?php esc_html_e( 'High Priority (30)', 'product-document-viewer-for-woocommerce' ); ?></option>
 						</select>
 					</td>
 				</tr>
@@ -170,27 +170,27 @@ function wcrl_settings_page_html() {
 function wcrl_register_settings() {
 	add_settings_section(
 		'wcrl_button_style_section',
-		__( 'Button Style Options', 'read-little' ),
+		__( 'Button Style Options', 'product-document-viewer-for-woocommerce' ),
 		null,
 		'wcrl-options'
 	);
 
 	// Checkbox fields
-	wcrl_add_checkbox_field( 'wcrl_hide_button_position', __( 'Hide button - I\'m using shortcode', 'read-little' ), __( 'Hide the default display button, use shortcode instead. Here is the shortcode: [read_little_button]', 'read-little' ) );
-	wcrl_add_checkbox_field( 'wcrl_button_rounded', __( 'Rounded Button', 'read-little' ), __( 'Make the button corners rounded.', 'read-little' ) );
-	wcrl_add_text_field( 'wcrl_button_round_size', __( 'Button Rounding Size', 'read-little' ), __( 'Set the button round size in pixels. E.g., 10px 20px.', 'read-little' ) );
-	wcrl_add_checkbox_field( 'wcrl_button_transparent_bg', __( 'Transparent Background', 'read-little' ), __( 'Set the button background to transparent.', 'read-little' ) );
+	wcrl_add_checkbox_field( 'wcrl_hide_button_position', __( 'Hide button - I\'m using shortcode', 'product-document-viewer-for-woocommerce' ), __( 'Hide the default display button, use shortcode instead. Here is the shortcode: [read_little_button]', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_checkbox_field( 'wcrl_button_rounded', __( 'Rounded Button', 'product-document-viewer-for-woocommerce' ), __( 'Make the button corners rounded.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_text_field( 'wcrl_button_round_size', __( 'Button Rounding Size', 'product-document-viewer-for-woocommerce' ), __( 'Set the button round size in pixels. E.g., 10px 20px.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_checkbox_field( 'wcrl_button_transparent_bg', __( 'Transparent Background', 'product-document-viewer-for-woocommerce' ), __( 'Set the button background to transparent.', 'product-document-viewer-for-woocommerce' ) );
 
 	// Color fields
-	wcrl_add_color_field( 'wcrl_button_font_color', __( 'Button Text Color', 'read-little' ), __( 'Select the button text color.', 'read-little' ) );
-	wcrl_add_color_field( 'wcrl_button_border_color', __( 'Button Border Color', 'read-little' ), __( 'Select the button border color.', 'read-little' ) );
-	wcrl_add_color_field( 'wcrl_button_hover_bg_color', __( 'Hover Background Color', 'read-little' ), __( 'Select the hover background color for the button.', 'read-little' ) );
+	wcrl_add_color_field( 'wcrl_button_font_color', __( 'Button Text Color', 'product-document-viewer-for-woocommerce' ), __( 'Select the button text color.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_color_field( 'wcrl_button_border_color', __( 'Button Border Color', 'product-document-viewer-for-woocommerce' ), __( 'Select the button border color.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_color_field( 'wcrl_button_hover_bg_color', __( 'Hover Background Color', 'product-document-viewer-for-woocommerce' ), __( 'Select the hover background color for the button.', 'product-document-viewer-for-woocommerce' ) );
 
 	// Dimension fields
-	wcrl_add_text_field( 'wcrl_button_width', __( 'Button Width (px)', 'read-little' ), __( 'Set the width of the button.', 'read-little' ) );
-	wcrl_add_text_field( 'wcrl_button_height', __( 'Button Height (px)', 'read-little' ), __( 'Set the height of the button.', 'read-little' ) );
-	wcrl_add_text_field( 'wcrl_button_margin', __( 'Button Margin', 'read-little' ), __( 'Set the margin for the button. E.g., 10px 5px.', 'read-little' ) );
-	wcrl_add_text_field( 'wcrl_button_padding', __( 'Button Padding', 'read-little' ), __( 'Set the padding for the button.', 'read-little' ) );
+	wcrl_add_text_field( 'wcrl_button_width', __( 'Button Width (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the width of the button.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_text_field( 'wcrl_button_height', __( 'Button Height (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the height of the button.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_text_field( 'wcrl_button_margin', __( 'Button Margin', 'product-document-viewer-for-woocommerce' ), __( 'Set the margin for the button. E.g., 10px 5px.', 'product-document-viewer-for-woocommerce' ) );
+	wcrl_add_text_field( 'wcrl_button_padding', __( 'Button Padding', 'product-document-viewer-for-woocommerce' ), __( 'Set the padding for the button.', 'product-document-viewer-for-woocommerce' ) );
 
 	// Register general settings
 	register_setting(

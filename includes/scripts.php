@@ -1,15 +1,15 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-$version = WP_DEBUG ? time() : WOO_READ_LITTLE_VERSION;
+$pdvwc_version = WP_DEBUG ? time() : WOO_READ_LITTLE_VERSION;
 
 // Enqueue Fancybox scripts and styles
 wp_enqueue_style( 'wrl-fancybox', WOO_READ_LITTLE_ASSETS_URL . 'css/jquery.fancybox.min.css' );
 wp_enqueue_script( 'wrl-fancybox', WOO_READ_LITTLE_ASSETS_URL . 'js/jquery.fancybox.min.js', array( 'jquery' ), null, true );
 
 // Enqueue custom scripts and styles
-wp_enqueue_script( 'read-little', WOO_READ_LITTLE_ASSETS_URL . 'js/read-little.js', array( 'jquery', 'wrl-fancybox' ), $version, true );
-wp_enqueue_style( 'read-little', WOO_READ_LITTLE_ASSETS_URL . 'css/read-little.css', array(), $version, 'all' );
+wp_enqueue_script( 'product-document-viewer-for-woocommerce', WOO_READ_LITTLE_ASSETS_URL . 'js/read-little.js', array( 'jquery', 'wrl-fancybox' ), $pdvwc_version, true );
+wp_enqueue_style( 'product-document-viewer-for-woocommerce', WOO_READ_LITTLE_ASSETS_URL . 'css/read-little.css', array(), $pdvwc_version, 'all' );
 
 // Add inline styles for the open-pdf-popup-btn class
 $button_bg_color      = get_option( 'wcrl_button_color', '#0073aa' );           // Default button color
@@ -129,5 +129,5 @@ if ( ! empty( $button_font_color ) ) {
     }';
 }
 
-// Add inline styles after the 'read-little' stylesheet
-wp_add_inline_style( 'read-little', wp_strip_all_tags( $inline_styles ) );
+// Add inline styles after the 'product-document-viewer-for-woocommerce' stylesheet
+wp_add_inline_style( 'product-document-viewer-for-woocommerce', wp_strip_all_tags( $inline_styles ) );

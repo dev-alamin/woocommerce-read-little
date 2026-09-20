@@ -1,0 +1,273 @@
+# Copyright (C) 2026 Al Amin
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Product Document Viewer for WooCommerce 1.2.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-read-little\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-20T07:42:32+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: product-document-viewer-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: read-a-little-for-woocommerce.php
+msgid "Product Document Viewer for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: read-a-little-for-woocommerce.php
+msgid "https://shaliktheme.com/plugins/read-a-little"
+msgstr ""
+
+#. Description of the plugin
+#: read-a-little-for-woocommerce.php
+msgid "Preview PDFs, Word, Excel, and PowerPoint files directly on WooCommerce product pages."
+msgstr ""
+
+#. Author of the plugin
+#: read-a-little-for-woocommerce.php
+msgid "Al Amin"
+msgstr ""
+
+#. Author URI of the plugin
+#: read-a-little-for-woocommerce.php
+msgid "https://almn.me/read-a-little-for-woocommerce/"
+msgstr ""
+
+#: includes/admin-settings.php:10
+#: includes/admin-settings.php:11
+msgid "Document Viewer"
+msgstr ""
+
+#: includes/admin-settings.php:95
+msgid "Document Viewer Settings"
+msgstr ""
+
+#: includes/admin-settings.php:101
+msgid "Button Position"
+msgstr ""
+
+#: includes/admin-settings.php:106
+msgid "Before Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:107
+msgid "Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:108
+msgid "Before Add to Cart Form"
+msgstr ""
+
+#: includes/admin-settings.php:109
+msgid "Before Variations Form"
+msgstr ""
+
+#: includes/admin-settings.php:110
+msgid "Before Add to Cart Button"
+msgstr ""
+
+#: includes/admin-settings.php:111
+msgid "Before Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:112
+msgid "Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:113
+msgid "Before Add to Cart Quantity"
+msgstr ""
+
+#: includes/admin-settings.php:114
+msgid "After Add to Cart Quantity"
+msgstr ""
+
+#: includes/admin-settings.php:115
+msgid "After Single Variation"
+msgstr ""
+
+#: includes/admin-settings.php:116
+msgid "After Add to Cart Button"
+msgstr ""
+
+#: includes/admin-settings.php:117
+msgid "After Variations Form"
+msgstr ""
+
+#: includes/admin-settings.php:118
+msgid "After Add to Cart Form"
+msgstr ""
+
+#: includes/admin-settings.php:119
+msgid "Product Meta Start"
+msgstr ""
+
+#: includes/admin-settings.php:120
+msgid "Product Meta End"
+msgstr ""
+
+#: includes/admin-settings.php:121
+msgid "Share"
+msgstr ""
+
+#: includes/admin-settings.php:122
+msgid "After Single Product Summary"
+msgstr ""
+
+#: includes/admin-settings.php:133
+msgid "Button Text"
+msgstr ""
+
+#: includes/admin-settings.php:139
+msgid "Extra Button Class"
+msgstr ""
+
+#: includes/admin-settings.php:142
+msgid "You can enter multiple space-separated classes, e.g. \"btn-lg my-class\"."
+msgstr ""
+
+#: includes/admin-settings.php:146
+msgid "Button Color"
+msgstr ""
+
+#: includes/admin-settings.php:152
+msgid "Hook Priority"
+msgstr ""
+
+#: includes/admin-settings.php:156
+msgid "Low Priority (10)"
+msgstr ""
+
+#: includes/admin-settings.php:157
+msgid "Medium Priority (20)"
+msgstr ""
+
+#: includes/admin-settings.php:158
+msgid "High Priority (30)"
+msgstr ""
+
+#: includes/admin-settings.php:173
+msgid "Button Style Options"
+msgstr ""
+
+#: includes/admin-settings.php:179
+msgid "Hide button - I'm using shortcode"
+msgstr ""
+
+#: includes/admin-settings.php:179
+msgid "Hide the default display button, use shortcode instead. Here is the shortcode: [read_little_button]"
+msgstr ""
+
+#: includes/admin-settings.php:180
+msgid "Rounded Button"
+msgstr ""
+
+#: includes/admin-settings.php:180
+msgid "Make the button corners rounded."
+msgstr ""
+
+#: includes/admin-settings.php:181
+msgid "Button Rounding Size"
+msgstr ""
+
+#: includes/admin-settings.php:181
+msgid "Set the button round size in pixels. E.g., 10px 20px."
+msgstr ""
+
+#: includes/admin-settings.php:182
+msgid "Transparent Background"
+msgstr ""
+
+#: includes/admin-settings.php:182
+msgid "Set the button background to transparent."
+msgstr ""
+
+#: includes/admin-settings.php:185
+msgid "Button Text Color"
+msgstr ""
+
+#: includes/admin-settings.php:185
+msgid "Select the button text color."
+msgstr ""
+
+#: includes/admin-settings.php:186
+msgid "Button Border Color"
+msgstr ""
+
+#: includes/admin-settings.php:186
+msgid "Select the button border color."
+msgstr ""
+
+#: includes/admin-settings.php:187
+msgid "Hover Background Color"
+msgstr ""
+
+#: includes/admin-settings.php:187
+msgid "Select the hover background color for the button."
+msgstr ""
+
+#: includes/admin-settings.php:190
+msgid "Button Width (px)"
+msgstr ""
+
+#: includes/admin-settings.php:190
+msgid "Set the width of the button."
+msgstr ""
+
+#: includes/admin-settings.php:191
+msgid "Button Height (px)"
+msgstr ""
+
+#: includes/admin-settings.php:191
+msgid "Set the height of the button."
+msgstr ""
+
+#: includes/admin-settings.php:192
+msgid "Button Margin"
+msgstr ""
+
+#: includes/admin-settings.php:192
+msgid "Set the margin for the button. E.g., 10px 5px."
+msgstr ""
+
+#: includes/admin-settings.php:193
+msgid "Button Padding"
+msgstr ""
+
+#: includes/admin-settings.php:193
+msgid "Set the padding for the button."
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:29
+msgid "WooCommerce Read Little requires WooCommerce to be installed and activated."
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:95
+msgid "Read Little: Carbon Fields library is missing (vendor/autoload.php not found). Custom fields will not appear."
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:126
+msgid "Read Little Sample File"
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:130
+msgid "Upload images, documents, PDFs, and Excel files to showcase the preview."
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:340
+msgid "No book preview available."
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:386
+msgid "Settings"
+msgstr ""
+
+#: read-a-little-for-woocommerce.php:404
+msgid "This is a local/development environment. A bundled sample file is shown here instead of the real attachment — on the live site, your actual file will display."
+msgstr ""
