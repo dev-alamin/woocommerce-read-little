@@ -40,7 +40,12 @@ function pdvwc_add_checkbox_field( $id, $title, $description ) {
 }
 
 // Helper to add text field.
-function pdvwc_add_text_field( $id, $title, $description ) {
+//
+// $sanitize_callback defaults to sanitize_text_field for plain text, but the
+// button-dimension fields below pass pdvwc_sanitize_css_dimension() instead,
+// since their values are concatenated into a <style> block and need to be
+// validated against a safe CSS-length pattern, not just sanitized as text.
+function pdvwc_add_text_field( $id, $title, $description, $sanitize_callback = 'sanitize_text_field' ) {
 	add_settings_field(
 		$id,
 		$title,
@@ -57,7 +62,7 @@ function pdvwc_add_text_field( $id, $title, $description ) {
 		$id,
 		array(
 			'type'              => 'string',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => $sanitize_callback,
 		)
 	);
 }
@@ -183,7 +188,9 @@ function pdvwc_register_settings() {
 	// Checkbox fields.
 	pdvwc_add_checkbox_field( 'pdvwc_hide_button_position', __( 'Hide button - I\'m using shortcode', 'product-document-viewer-for-woocommerce' ), __( 'Hide the default display button, use shortcode instead. Here is the shortcode: [pdvwc_preview_button]', 'product-document-viewer-for-woocommerce' ) );
 	pdvwc_add_checkbox_field( 'pdvwc_button_rounded', __( 'Rounded Button', 'product-document-viewer-for-woocommerce' ), __( 'Make the button corners rounded.', 'product-document-viewer-for-woocommerce' ) );
-	pdvwc_add_text_field( 'pdvwc_button_round_size', __( 'Button Rounding Size', 'product-document-viewer-for-woocommerce' ), __( 'Set the button round size in pixels. E.g., 10px 20px.', 'product-document-viewer-for-woocommerce' ) );
+	// CSS-dimension field: value is concatenated into a <style> block, so it
+	// must be validated against a safe CSS-length pattern, not plain text.
+	pdvwc_add_text_field( 'pdvwc_button_round_size', __( 'Button Rounding Size', 'product-document-viewer-for-woocommerce' ), __( 'Set the button round size in pixels. E.g., 10px 20px.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
 	pdvwc_add_checkbox_field( 'pdvwc_button_transparent_bg', __( 'Transparent Background', 'product-document-viewer-for-woocommerce' ), __( 'Set the button background to transparent.', 'product-document-viewer-for-woocommerce' ) );
 
 	// Color fields.
@@ -191,17 +198,17 @@ function pdvwc_register_settings() {
 	pdvwc_add_color_field( 'pdvwc_button_border_color', __( 'Button Border Color', 'product-document-viewer-for-woocommerce' ), __( 'Select the button border color.', 'product-document-viewer-for-woocommerce' ) );
 	pdvwc_add_color_field( 'pdvwc_button_hover_bg_color', __( 'Hover Background Color', 'product-document-viewer-for-woocommerce' ), __( 'Select the hover background color for the button.', 'product-document-viewer-for-woocommerce' ) );
 
-	// Dimension fields.
-	pdvwc_add_text_field( 'pdvwc_button_width', __( 'Button Width (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the width of the button.', 'product-document-viewer-for-woocommerce' ) );
-	pdvwc_add_text_field( 'pdvwc_button_height', __( 'Button Height (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the height of the button.', 'product-document-viewer-for-woocommerce' ) );
-	pdvwc_add_text_field( 'pdvwc_button_margin', __( 'Button Margin', 'product-document-viewer-for-woocommerce' ), __( 'Set the margin for the button. E.g., 10px 5px.', 'product-document-viewer-for-woocommerce' ) );
-	pdvwc_add_text_field( 'pdvwc_button_padding', __( 'Button Padding', 'product-document-viewer-for-woocommerce' ), __( 'Set the padding for the button.', 'product-document-viewer-for-woocommerce' ) );
+	// Dimension fields — all validated as CSS lengths (see pdvwc_sanitize_css_dimension()).
+	pdvwc_add_text_field( 'pdvwc_button_width', __( 'Button Width (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the width of the button.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
+	pdvwc_add_text_field( 'pdvwc_button_height', __( 'Button Height (px)', 'product-document-viewer-for-woocommerce' ), __( 'Set the height of the button.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
+	pdvwc_add_text_field( 'pdvwc_button_margin', __( 'Button Margin', 'product-document-viewer-for-woocommerce' ), __( 'Set the margin for the button. E.g., 10px 5px.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
+	pdvwc_add_text_field( 'pdvwc_button_padding', __( 'Button Padding', 'product-document-viewer-for-woocommerce' ), __( 'Set the padding for the button.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
 
 	// These two were previously read by includes/scripts.php but had no
 	// registered setting or UI field, so they could never actually be
 	// changed. Wired up properly now instead of carrying the dead code forward.
-	pdvwc_add_text_field( 'pdvwc_button_font_size', __( 'Button Font Size', 'product-document-viewer-for-woocommerce' ), __( 'Set the button text size, e.g. 14px.', 'product-document-viewer-for-woocommerce' ) );
-	pdvwc_add_text_field( 'pdvwc_button_border_width', __( 'Button Border Width', 'product-document-viewer-for-woocommerce' ), __( 'Set the button border width, e.g. 1px.', 'product-document-viewer-for-woocommerce' ) );
+	pdvwc_add_text_field( 'pdvwc_button_font_size', __( 'Button Font Size', 'product-document-viewer-for-woocommerce' ), __( 'Set the button text size, e.g. 14px.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
+	pdvwc_add_text_field( 'pdvwc_button_border_width', __( 'Button Border Width', 'product-document-viewer-for-woocommerce' ), __( 'Set the button border width, e.g. 1px.', 'product-document-viewer-for-woocommerce' ), 'pdvwc_sanitize_css_dimension' );
 
 	// Register general settings.
 	register_setting(

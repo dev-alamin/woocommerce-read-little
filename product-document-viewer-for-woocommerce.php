@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Product Document Viewer for WooCommerce
- * Plugin URI: https://almn.me/product-document-viewer-for-woocommerce/
+ * Plugin URI: https://github.com/dev-alamin/woocommerce-read-little
  * Description: Preview PDFs, Word, Excel, and PowerPoint files directly on WooCommerce product pages.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: Al Amin
- * Author URI: https://almn.me
+ * Author URI: https://github.com/dev-alamin/
  * Requires Plugins: woocommerce
  * Requires PHP: 7.4
  * Text Domain: product-document-viewer-for-woocommerce
@@ -38,6 +38,7 @@ function pdvwc_woocommerce_inactive_notice() {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin-settings.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -324,18 +325,17 @@ class PDVWC_Plugin {
 			// Fixed viewport size — without this, Fancybox's autoSize measures
 			// the embedded PDF/Office viewer's full content height (which grows
 			// with page count) instead of treating it as a scrollable frame.
-			$viewer_dimensions = 'data-width="90%" data-height="90%"';
 
 			// One visible trigger button, using the first document as its href.
 			$first_url = array_shift( $viewer_urls );
-			echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $first_url ) . '">';
+			echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" data-width="90%" data-height="90%" href="' . esc_url( $first_url ) . '">';
 				echo '<button type="button" class="button btn pdvwc-button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
 			echo '</a>';
 
 			// Remaining documents: same gallery group, hidden from view — Fancybox's
 			// own next/prev arrows let people page through them once the lightbox is open.
 			foreach ( $viewer_urls as $extra_url ) {
-				echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" ' . $viewer_dimensions . ' href="' . esc_url( $extra_url ) . '" style="display:none;" aria-hidden="true"></a>';
+				echo '<a class="iframe pdvwc-fancybox-trigger" data-fancybox="' . esc_attr( $gallery_group ) . '" data-type="iframe" data-width="90%" data-height="90%" href="' . esc_url( $extra_url ) . '" style="display:none;" aria-hidden="true"></a>';
 			}
 		} else {
 			echo '<button type="button" class="pdvwc-open-popup-btn wd-buy-now-btn button ' . esc_attr( $extra_button_class ) . '">' . esc_html( $button_text ) . '</button>';
